@@ -1,0 +1,25 @@
+{
+  "name": "master-mircea-h",
+  "version": "1.0.0",
+  "description": "practical example used in my master work",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirceah99/masters-degree.git"
+  },
+  "author": "Hanghiuc Mircea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mirceah99/masters-degree/issues"
+  },
+  "homepage": "https://github.com/mirceah99/masters-degree#readme",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

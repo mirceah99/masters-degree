@@ -1,8 +1,8 @@
 const axios = require('axios');
 const config = require('./config')
-let successOperations = 0;
-const createAuthToken =  (userName) =>{
-    return axios.get(`${config.DOMAIN}/getToken?userName=${userName}`).then(response => response.data.token);
+const createChart = require('./chart')
+const createAuthToken =  (userName, domain) =>{
+    return axios.get(`${domain}/getToken?userName=${userName}`).then(response => response.data.token);
 }
 const getUsername = ()=>{
     const characters = 'abcdefghijklmnopqrstuvwxyz0123456789_';
@@ -27,22 +27,36 @@ const runParallelAsync = async (operation, times) => {
     const results= await Promise.allSettled(promises);
     return results.map(result=> result.status === 'fulfilled' ? result.value : null)
 }
-const main = async () =>{
+const testPerformance = async (numberOfOperations, method) => {
     const startTime = new Date();
+    console.log(`METHOD[${method}] numberOfOperations => ${numberOfOperations}`);
+    let successOperations = 0;
     let run = true;
     while(run){
-        const tokens = await runParallelAsync(createAuthToken.bind(this, getUsername()), config.REQUESTS_IN_PARALLEL);
+        const tokens = await runParallelAsync(createAuthToken.bind(this, getUsername(), config.DOMAIN[method]), config.REQUESTS_IN_PARALLEL);
         for(const token of tokens){
             token && successOperations++;
-            console.log(token)
-            if(successOperations >= config.TARGET_NR_OF_SUCCESS_REQUESTS){
+            if(successOperations >= numberOfOperations){
                 run = false;
                 break;
             }
         }
-        console.log(`successOperations => ${successOperations}`);
     }
-    console.log(`total running time: ${( Date.now()- startTime.getTime())/1_000}`)
+    const totalTime = ( Date.now()- startTime.getTime())/1_000;
+    console.log(`METHOD[${method}] total running time: ${totalTime}`)
+    return totalTime;
 }
 
- main();
+async function main (){
+    const methods = ['mircea', 'classic'];
+    const results = [];
+    for(const method of methods){
+        const times = [];
+        for(const numberOfSuccessRequests  of config.TARGET_NR_OF_SUCCESS_REQUESTS_ARRAY){
+            times.push(await testPerformance(numberOfSuccessRequests, method));
+        }
+        results.push({label: method, data: times})
+    }
+    await createChart(config.TARGET_NR_OF_SUCCESS_REQUESTS_ARRAY, ...results, 'Generation of JWT')
+}
+main();

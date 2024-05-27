@@ -2,12 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000;
+let port;
 let getToken;
 if(process.env.METHOD === 'mircea'){
     getToken = require('./auth-mircea');
+    port = 3000;
 }else {
     getToken = require("./auth-basic");
+    port = 3001;
 }
 app.use(bodyParser.json());
 

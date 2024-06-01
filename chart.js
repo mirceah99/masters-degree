@@ -37,10 +37,21 @@ const  createChart = async(labels, d1, d2, name)=>{
                 x: {
                     type: 'linear',
                     position: 'bottom',
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of tokens generated',
+                        color: "#FFFFFF"
+                    }
                 },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Time in seconds',
+                        color: "#FFFFFF"
+                    }
+
                 }
             }
         }

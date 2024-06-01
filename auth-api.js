@@ -21,6 +21,7 @@ app.get('/getToken', (req, res) => {
 
     const token = getToken(userName);
     res.json({ token });
+    res.send()
 });
 
 app.listen(port, () => {
